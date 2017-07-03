@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.learning.thrift</groupId>
+	<artifactId>server</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>server</name>
+	<description>Server project for Thrift Swift Spring Boot</description>
+
+	<parent>
+		<groupId>com.learning.thrift</groupId>
+		<artifactId>root</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.facebook.swift</groupId>
+			<artifactId>swift2thrift-generator-cli</artifactId>
+			<version>0.23.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
+		<dependency>
+			<groupId>com.facebook.swift</groupId>
+			<artifactId>swift-service</artifactId>
+			<version>0.23.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.validation</groupId>
+					<artifactId>validation-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!--All Swift Dependencies-->
+		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-annotations -->
+		<dependency>
+			<groupId>com.facebook.swift</groupId>
+			<artifactId>swift-annotations</artifactId>
+			<version>0.23.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
+		<dependency>
+			<groupId>com.facebook.swift</groupId>
+			<artifactId>swift-codec</artifactId>
+			<version>0.23.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.facebook.nifty/nifty-core -->
+		<dependency>
+			<groupId>com.facebook.nifty</groupId>
+			<artifactId>nifty-core</artifactId>
+			<version>0.23.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!--<plugin>-->
+				<!--<groupId>org.springframework.boot</groupId>-->
+				<!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+			<!--</plugin>-->
+			<!--<plugin>-->
+				<!--<groupId>org.apache.thrift.tools</groupId>-->
+				<!--<artifactId>maven-thrift-plugin</artifactId>-->
+				<!--<version>0.1.11</version>-->
+				<!--<configuration>-->
+					<!--<thriftExecutable>c:\dev\tools\apache-thrift\thrift-0.9.3.exe</thriftExecutable>-->
+				<!--</configuration>-->
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<id>thrift-sources</id>-->
+						<!--<phase>generate-sources</phase>-->
+						<!--<goals>-->
+							<!--<goal>compile</goal>-->
+						<!--</goals>-->
+					<!--</execution>-->
+					<!--<execution>-->
+						<!--<id>thrift-test-sources</id>-->
+						<!--<phase>generate-test-sources</phase>-->
+						<!--<goals>-->
+							<!--<goal>testCompile</goal>-->
+						<!--</goals>-->
+					<!--</execution>-->
+				<!--</executions>-->
+			<!--</plugin>-->
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<configuration>
+					<mainClass>com.facebook.swift.generator.swift2thrift.Main</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<id>calc</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<arguments>
+								<argument>
+									com.learning.thrift.service.CalculationService
+								</argument>
+								<argument>-allow_multiple_packages</argument>
+								<argument>com.learning.thrift.generated</argument>
+								<argument>-namespace</argument>
+								<argument>java</argument>
+								<argument>com.learning.thrift.generated2</argument>
+								<argument>-out</argument>
+								<argument>
+									${basedir}/src/main/thrift/data.thrift
+								</argument>
+								<argument>-v</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--<plugin>-->
+				<!--<groupId>com.facebook.mojo</groupId>-->
+				<!--<artifactId>swift-maven-plugin</artifactId>-->
+				<!--<version>0.23.1</version>-->
+				<!--&lt;!&ndash;<scope>test</scope>&ndash;&gt;-->
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<goals>-->
+							<!--<goal>generate</goal>-->
+						<!--</goals>-->
+					<!--</execution>-->
+				<!--</executions>-->
+				<!--<configuration>-->
+					<!--<idlFiles>-->
+						<!--<directory>src/main/thrift</directory>-->
+						<!--<includes>-->
+							<!--<include>*.thrift</include>-->
+						<!--</includes>-->
+					<!--</idlFiles>-->
+				<!--</configuration>-->
+			<!--</plugin>-->
+		</plugins>
+	</build>
+
+
+</project>
