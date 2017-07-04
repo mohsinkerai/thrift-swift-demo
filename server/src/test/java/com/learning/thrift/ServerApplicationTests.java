@@ -1,7 +1,10 @@
 package com.learning.thrift;
 
+import static org.junit.Assert.assertEquals;
+
 import com.facebook.nifty.client.HttpClientConnector;
 import com.facebook.swift.service.ThriftClientManager;
+import com.learning.thrift.dto.IntegerDTO;
 import com.learning.thrift.service.CalculationService;
 import java.net.URI;
 import java.util.Random;
@@ -36,5 +39,29 @@ public class ServerApplicationTests {
 		int one = Math.abs(random.nextInt());
 		int two =  Math.abs(random.nextInt());
 		LOG.info("Adding {} and {}, Answer is {}", one, two, clientCalcualtionService.add(one,two));
+	}
+
+	@Test
+	public void contextLoadsWithObject() {
+		Random random = new Random();
+		IntegerDTO a = new IntegerDTO();
+		a.setValue(Math.abs(random.nextInt()));
+		IntegerDTO b = new IntegerDTO();
+		b.setValue(Math.abs(random.nextInt()));
+		final int integerDTO = clientCalcualtionService.addObject(a, b);
+		LOG.info("Adding {} and {}, Answer is {}", a, b, integerDTO);
+		assertEquals(a.getValue()+b.getValue(),integerDTO);
+	}
+
+	@Test
+	public void contextLoadsWithObjectReturnObject() {
+		Random random = new Random();
+		IntegerDTO a = new IntegerDTO();
+		a.setValue(Math.abs(random.nextInt()));
+		IntegerDTO b = new IntegerDTO();
+		b.setValue(Math.abs(random.nextInt()));
+		final IntegerDTO integerDTO = clientCalcualtionService.addObjectReturnObject(a, b);
+		LOG.info("Adding {} and {}, Answer is {}", a, b, integerDTO);
+		assertEquals(a.getValue()+b.getValue(),integerDTO.getValue());
 	}
 }
