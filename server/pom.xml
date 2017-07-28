@@ -78,10 +78,10 @@
 
 	<build>
 		<plugins>
-			<!--<plugin>-->
-				<!--<groupId>org.springframework.boot</groupId>-->
-				<!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-			<!--</plugin>-->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 			<!--<plugin>-->
 				<!--<groupId>org.apache.thrift.tools</groupId>-->
 				<!--<artifactId>maven-thrift-plugin</artifactId>-->
@@ -126,11 +126,12 @@
 								<argument>
 									com.learning.thrift.service.CalculationService
 								</argument>
+								<argument>com.learning.thrift.dto.IntegerDTO</argument>
 								<argument>-allow_multiple_packages</argument>
-								<argument>com.learning.thrift.generated</argument>
+								<argument>com.learning.thrift.files</argument>
 								<argument>-namespace</argument>
 								<argument>java</argument>
-								<argument>com.learning.thrift.generated2</argument>
+								<argument>com.learning.thrift.files</argument>
 								<argument>-out</argument>
 								<argument>
 									${basedir}/src/main/thrift/data.thrift
@@ -142,27 +143,29 @@
 				</executions>
 			</plugin>
 
-			<!--<plugin>-->
-				<!--<groupId>com.facebook.mojo</groupId>-->
-				<!--<artifactId>swift-maven-plugin</artifactId>-->
-				<!--<version>0.23.1</version>-->
-				<!--&lt;!&ndash;<scope>test</scope>&ndash;&gt;-->
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<goals>-->
-							<!--<goal>generate</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-				<!--</executions>-->
-				<!--<configuration>-->
-					<!--<idlFiles>-->
-						<!--<directory>src/main/thrift</directory>-->
-						<!--<includes>-->
-							<!--<include>*.thrift</include>-->
-						<!--</includes>-->
-					<!--</idlFiles>-->
-				<!--</configuration>-->
-			<!--</plugin>-->
+			<plugin>
+				<groupId>com.facebook.mojo</groupId>
+				<artifactId>swift-maven-plugin</artifactId>
+				<version>0.23.1</version>
+				<!--<scope>test</scope>-->
+				<executions>
+					<execution>
+						<id>thrift-swift-test-execution</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<idlFiles>
+						<directory>${basedir}/src/main/thrift</directory>
+						<includes>
+							<include>data.thrift</include>
+						</includes>
+					</idlFiles>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
