@@ -82,31 +82,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!--<plugin>-->
-				<!--<groupId>org.apache.thrift.tools</groupId>-->
-				<!--<artifactId>maven-thrift-plugin</artifactId>-->
-				<!--<version>0.1.11</version>-->
-				<!--<configuration>-->
-					<!--<thriftExecutable>c:\dev\tools\apache-thrift\thrift-0.9.3.exe</thriftExecutable>-->
-				<!--</configuration>-->
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<id>thrift-sources</id>-->
-						<!--<phase>generate-sources</phase>-->
-						<!--<goals>-->
-							<!--<goal>compile</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-					<!--<execution>-->
-						<!--<id>thrift-test-sources</id>-->
-						<!--<phase>generate-test-sources</phase>-->
-						<!--<goals>-->
-							<!--<goal>testCompile</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-				<!--</executions>-->
-			<!--</plugin>-->
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -116,7 +91,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>calc</id>
+						<id>calculation</id>
 						<phase>process-classes</phase>
 						<goals>
 							<goal>java</goal>
@@ -124,17 +99,20 @@
 						<configuration>
 							<arguments>
 								<argument>
-									com.learning.thrift.service.CalculationService
+									com.learning.thrift.service.AdditionService
+								</argument>
+								<argument>
+									com.learning.thrift.service.SubtractionService
 								</argument>
 								<argument>com.learning.thrift.dto.IntegerDTO</argument>
 								<argument>-allow_multiple_packages</argument>
-								<argument>com.learning.thrift.files</argument>
+								<argument>com.learning.thrift.generated</argument>
 								<argument>-namespace</argument>
 								<argument>java</argument>
-								<argument>com.learning.thrift.files</argument>
+								<argument>com.learning.thrift.generated</argument>
 								<argument>-out</argument>
 								<argument>
-									${basedir}/src/main/thrift/data.thrift
+									${basedir}/src/main/thrift/calculation.thrift
 								</argument>
 								<argument>-v</argument>
 							</arguments>
@@ -142,16 +120,14 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>com.facebook.mojo</groupId>
 				<artifactId>swift-maven-plugin</artifactId>
 				<version>0.23.1</version>
-				<!--<scope>test</scope>-->
 				<executions>
 					<execution>
 						<id>thrift-swift-test-execution</id>
-						<phase>generate-test-resources</phase>
+						<phase>process-classes</phase>
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -161,10 +137,28 @@
 					<idlFiles>
 						<directory>${basedir}/src/main/thrift</directory>
 						<includes>
-							<include>data.thrift</include>
+							<include>calculation.thrift</include>
 						</includes>
 					</idlFiles>
 				</configuration>
+			</plugin>
+			<!--For Tests, It should copy thrift classes to test ones-->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/swift</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

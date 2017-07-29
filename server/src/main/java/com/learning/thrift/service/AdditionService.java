@@ -8,8 +8,8 @@ import com.learning.thrift.dto.IntegerDTO;
 /**
  * Created by Mohsin Mansoor Kerai on 03-Jul-17.
  */
-@ThriftService("CalculationService")
-public interface CalculationService {
+@ThriftService("AdditionService")
+public interface AdditionService {
 
   @ThriftMethod("add")
   int add(@ThriftField(1) int a,@ThriftField(2) int b);

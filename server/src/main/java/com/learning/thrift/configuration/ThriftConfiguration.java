@@ -2,9 +2,9 @@ package com.learning.thrift.configuration;
 
 import com.facebook.nifty.processor.NiftyProcessorAdapters;
 import com.facebook.swift.codec.ThriftCodecManager;
-import com.facebook.swift.service.ThriftEventHandler;
 import com.facebook.swift.service.ThriftServiceProcessor;
-import com.learning.thrift.service.CalculationService;
+import com.learning.thrift.service.AdditionService;
+import com.learning.thrift.service.SubtractionService;
 import java.util.Arrays;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocolFactory;
@@ -27,18 +27,40 @@ public class ThriftConfiguration {
   }
 
   @Bean
-  public ServletRegistrationBean thriftCalculationServelet(ThriftCodecManager thriftCodecManager,
+  public ServletRegistrationBean additionServlet(ThriftCodecManager thriftCodecManager,
       TProtocolFactory protocolFactory,
-      CalculationService calculationService) {
+      AdditionService additionService) {
     ThriftServiceProcessor processor =
-        new ThriftServiceProcessor(thriftCodecManager, Arrays.<ThriftEventHandler>asList(),
-            calculationService);
+        new ThriftServiceProcessor(thriftCodecManager, Arrays.asList(),
+            additionService);
 
     TServlet tServlet = new TServlet(
         NiftyProcessorAdapters.processorToTProcessor(processor), protocolFactory,
         protocolFactory);
 
-    return new ServletRegistrationBean(tServlet, "/calculate");
+    final ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(tServlet,
+        "/add");
+
+    servletRegistrationBean.setName("additionServlet");
+    return servletRegistrationBean;
   }
 
+  @Bean
+  public ServletRegistrationBean subtractionServlet(ThriftCodecManager thriftCodecManager,
+      TProtocolFactory protocolFactory,
+      SubtractionService subtractionService) {
+    ThriftServiceProcessor processor =
+        new ThriftServiceProcessor(thriftCodecManager, Arrays.asList(),
+            subtractionService);
+
+    TServlet tServlet = new TServlet(
+        NiftyProcessorAdapters.processorToTProcessor(processor), protocolFactory,
+        protocolFactory);
+
+    final ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(tServlet,
+        "/subtract");
+
+    servletRegistrationBean.setName("subtractionServlet");
+    return servletRegistrationBean;
+  }
 }

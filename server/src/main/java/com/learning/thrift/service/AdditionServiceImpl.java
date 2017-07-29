@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
  * Created by Mohsin Mansoor Kerai on 03-Jul-17.
  */
 @Service
-public class CalculationServiceImpl implements CalculationService {
+public class AdditionServiceImpl implements AdditionService {
 
   @Override
   public int add(int a, int b) {

@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import com.facebook.nifty.client.HttpClientConnector;
 import com.facebook.swift.service.ThriftClientManager;
-import com.learning.thrift.dto.IntegerDTO;
-import com.learning.thrift.service.CalculationService;
+import com.learning.thrift.generated.AdditionService;
+import com.learning.thrift.generated.IntegerDTO;
 import java.net.URI;
 import java.util.Random;
 import org.junit.Before;
@@ -19,48 +19,48 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
-public class ServerApplicationTests {
+public class TAdditionIntegrationTest {
 
 	Logger LOG = LoggerFactory.getLogger(this.getClass());
 
-	CalculationService clientCalcualtionService;
+	AdditionService additionService;
 
 	@Before
 	public void setUp() throws Exception {
 		ThriftClientManager clientManager = new ThriftClientManager();
-		URI uri = URI.create("http://localhost:8080/calculate");
+		URI uri = URI.create("http://localhost:8080/add");
 		HttpClientConnector connector = new HttpClientConnector(uri);
-		this.clientCalcualtionService = clientManager.createClient(connector, CalculationService.class).get();
+		this.additionService = clientManager.createClient(connector, AdditionService.class).get();
 	}
 
 	@Test
-	public void contextLoads() {
+	public void contextLoads() throws Exception{
 		Random random = new Random();
 		int one = Math.abs(random.nextInt());
 		int two =  Math.abs(random.nextInt());
-		LOG.info("Adding {} and {}, Answer is {}", one, two, clientCalcualtionService.add(one,two));
+		LOG.info("Adding {} and {}, Answer is {}", one, two, additionService.add(one,two));
 	}
 
 	@Test
-	public void contextLoadsWithObject() {
+	public void contextLoadsWithObject() throws Exception{
 		Random random = new Random();
 		IntegerDTO a = new IntegerDTO();
 		a.setValue(Math.abs(random.nextInt()));
 		IntegerDTO b = new IntegerDTO();
 		b.setValue(Math.abs(random.nextInt()));
-		final int integerDTO = clientCalcualtionService.addObject(a, b);
+		final int integerDTO = additionService.addObject(a, b);
 		LOG.info("Adding {} and {}, Answer is {}", a, b, integerDTO);
 		assertEquals(a.getValue()+b.getValue(),integerDTO);
 	}
 
 	@Test
-	public void contextLoadsWithObjectReturnObject() {
+	public void contextLoadsWithObjectReturnObject() throws Exception {
 		Random random = new Random();
 		IntegerDTO a = new IntegerDTO();
 		a.setValue(Math.abs(random.nextInt()));
 		IntegerDTO b = new IntegerDTO();
 		b.setValue(Math.abs(random.nextInt()));
-		final IntegerDTO integerDTO = clientCalcualtionService.addObjectReturnObject(a, b);
+		final IntegerDTO integerDTO = additionService.addObjectReturnObject(a, b);
 		LOG.info("Adding {} and {}, Answer is {}", a, b, integerDTO);
 		assertEquals(a.getValue()+b.getValue(),integerDTO.getValue());
 	}
